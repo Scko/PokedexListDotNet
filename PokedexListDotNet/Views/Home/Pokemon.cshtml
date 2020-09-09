@@ -1,0 +1,135 @@
+﻿<link href="~/css/Pokemon.css" rel="stylesheet" />
+@using NonFactors.Mvc.Grid;
+@model PokemonViewModel
+<div>
+    <h1>
+        @Model.Name
+    </h1>
+    <img src=@Model.Sprites.other.OfficialArtwork.front_default alt="official art" />
+    <img src=@Model.Sprites.front_default alt="default sprite" style="width:10%" />
+    <img src=@Model.Sprites.front_shiny alt="shiny sprite" style="width:10%" />
+
+
+    <h2>Types</h2>
+    <table class="center-table">
+        <tbody>
+            <tr>
+                <td><button style="background-color: @Model.primaryColor">@Model.Types[0].Name</button></td>
+                @if (Model.Types.Count > 1)
+                {
+                    <td><button style="background-color: @Model.secondaryColor">@Model.Types[1].Name</button></td>
+                }
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Abilities</h2>
+    <table class="center-table">
+        <tbody>
+            <tr>
+                @foreach (var item in Model.Abilities)
+                {
+                    <td><button style="background-color: @Model.primaryColor">@item.Name</button></td>
+                }
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Stats</h2>
+    <table class="center-table">
+        <tbody>
+            <tr>
+                @foreach (var item in Model.Stats)
+                {
+                    <th>@item.Name</th>
+                }
+            </tr>
+            <tr>
+                @foreach (var item in Model.Stats)
+                {
+                    <td>@item.Base_Stat</td>
+                }
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Moves</h2>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method="level-up" asp-route-version=@Model.version>Level Up</a>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method="machine" asp-route-version=@Model.version>Machine</a>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method="tutor" asp-route-version=@Model.version>Tutor</a>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method="egg" asp-route-version=@Model.version>Egg</a>
+    <div class="center-table">
+        @(Html
+    .Grid(Model.Moves)
+    .Build(columns =>
+    {
+        columns.Add(model => model.Name).Titled("Name");
+        columns.Add(model => model.Level_Learned_At).Titled("Level_Learned_At");
+        columns.Add(model => model.MoveLearnMethod).Titled("MoveLearnMethod").UsingFilterOptions(new[]
+        {
+            new SelectListItem(),
+            new SelectListItem { Value = "machine", Text = "Machine" },
+            new SelectListItem { Value = "level-up", Text = "Level Up" },
+            new SelectListItem { Value = "tutor", Text = "Tutor" },
+            new SelectListItem { Value = "egg", Text = "Egg" }
+        });
+        columns.Add(model => model.VersionGroup).Titled("VersionGroup").UsingFilterOptions(new[]
+        {
+            new SelectListItem(),
+            new SelectListItem { Value = "red-blue", Text = "RB" },
+            new SelectListItem { Value = "yellow", Text = "Y" },
+            new SelectListItem { Value = "gold-silver", Text = "GS" },
+            new SelectListItem { Value = "crystal", Text = "C" },
+            new SelectListItem { Value = "ruby-sapphire", Text = "RS" },
+            new SelectListItem { Value = "emerald", Text = "E" },
+            new SelectListItem { Value = "firered-leafgreen", Text = "FRLG" },
+            new SelectListItem { Value = "diamond-pearl", Text = "DP" },
+            new SelectListItem { Value = "platinum", Text = "P" },
+            new SelectListItem { Value = "heartgold-soulsilver", Text = "HGSS" },
+            new SelectListItem { Value = "black-white", Text = "BW" },
+            new SelectListItem { Value = "colosseum", Text = "Col" },
+            new SelectListItem { Value = "xd", Text = "XD" },
+            new SelectListItem { Value = "black-2-white-2", Text = "B2W2" },
+            new SelectListItem { Value = "x-y", Text = "XY" },
+            new SelectListItem { Value = "omega-ruby-alpha-sapphire", Text = "ORAS" },
+            new SelectListItem { Value = "sun-moon", Text = "SM" },
+            new SelectListItem { Value = "ultra-sun-ultra-moon", Text = "USUM" }
+        });
+    })
+    .Using(GridFilterMode.Header)
+    .Empty("No data found")
+    .Sortable()
+    .Pageable())
+    </div>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method=@Model.method asp-route-version="red-blue">RB</a>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method=@Model.method asp-route-version="yellow">Y</a>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method=@Model.method asp-route-version="gold-silver">GS</a>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method=@Model.method asp-route-version="crystal">C</a>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method=@Model.method asp-route-version="ruby-sapphire">RS</a>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method=@Model.method asp-route-version="emerald">E</a>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method=@Model.method asp-route-version="firered-leafgreen">FRLG</a>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method=@Model.method asp-route-version="diamond-pearl">DP</a>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method=@Model.method asp-route-version="platinum">P</a>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method=@Model.method asp-route-version="heartgold-soulsilver">HGSS</a>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method=@Model.method asp-route-version="black-white">BW</a>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method=@Model.method asp-route-version="colosseum">Col</a>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method=@Model.method asp-route-version="xd">XD</a>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method=@Model.method asp-route-version="black-2-white-2">B2W2</a>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method=@Model.method asp-route-version="x-y">XY</a>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method=@Model.method asp-route-version="omega-ruby-alpha-sapphire">ORAS</a>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method=@Model.method asp-route-version="sun-moon">SM</a>
+    <a class="button-like" style="background-color: @Model.primaryColor" asp-controller="Home" asp-action="Pokemon" asp-route-name=@Model.Name asp-route-method=@Model.method asp-route-version="ultra-sun-ultra-moon">USUM</a>
+</div>
+
+<script>
+
+    function methodFilter(filter)
+    {
+        Model.method = filter;
+        console.log(filter);
+        console.log(@Model.method);
+        Model.Moves2 = Model.Moves.Select(m => m.MoveLearnMethod == Model.method);
+        //@Model.Moves2 = moves.filter(m => m.method == 'level-up');
+    }
+
+</script>

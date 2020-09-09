@@ -1,0 +1,106 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model DexListViewModel
+
+<link href="~/css/DexList.css" rel="stylesheet" />
+
+<div>
+    <div class="center-table-sm">
+        <h1>DexList</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Caught</th>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.DexEntries)
+                {
+                    <tr>
+                        <td>@Html.CheckBox(item.Name, item.Caught, new Dictionary<string, object> { { "onclick", "setChecked(" + item.Name + ")" } })</td>
+                        <td><a asp-controller="Home" asp-action="Pokemon" asp-route-name="@item.Name"> @item.Name</a></td>
+                    </tr>
+                }
+            </tbody>
+            <!--Add footer for totals-->
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            console.log("ready");
+            let boxes = document.querySelectorAll("input[type=checkbox]");
+            
+            for (i = 0; i < boxes.length; ++i) {
+                boxes[i].checked = alreadyChecked(boxes[i].id);
+            }
+        });
+
+        function alreadyChecked(pokemonName)
+        {
+            var alreadyCaught = this.getAlreadyCaught();
+
+            if (alreadyCaught.includes(pokemonName.toLowerCase())) {
+                return true;
+            }
+            return false;
+        }
+
+        function setChecked(pokemonName) {
+            let name = pokemonName.name;
+            console.log(name);
+            var alreadyCaught = this.updateAlreadyCaught(name.toLowerCase());
+        }
+
+        function setChecked2(pokemonName) {
+            //var alreadyCaught = this.updateAlreadyCaught(pokemonName.toLowerCase());
+
+            //var pokemon = this.state.pokemonNames.map(rd => ({ 'caught': alreadyCaught.includes(rd.name.toLowerCase()), 'name': this.Capitalize(rd.name), 'hiddenName': rd.name }));
+            //this.setState({ pokemonNames: pokemon });
+
+            //this.updateRender(pokemon);
+        }
+
+        //function updateRender(pokemon){
+        //    pokemon = pokemon.map(rd => ({
+        //        'caught': <input type='checkbox' checked={rd.caught ? `checked` : ''} onChange={(e) => { this.setChecked(e.currentTarget.id.toLowerCase()); }} id={rd.name} />,
+        //        'name': <Link to={`/dexlist/${rd.name.toLowerCase()}`}> {this.Capitalize(rd.name)}</Link>,
+        //        'hiddenName': rd.hiddenName
+        //    }));
+        //    var temp = { ...this.state.renderedPokemon };
+        //    temp.rows = pokemon;
+        //    this.setState({ renderedPokemon: temp });
+        //}
+
+        function updateAlreadyCaught(pokemonName) {
+            var alreadyCaught = this.getAlreadyCaught();
+
+            if (alreadyCaught.includes(pokemonName.toLowerCase())) {
+                const index = alreadyCaught.indexOf(pokemonName.toLowerCase());
+                if (index > -1) {
+                    alreadyCaught.splice(index, 1);
+                }
+            } else {
+                alreadyCaught = alreadyCaught.concat(pokemonName.toLowerCase());
+            }
+            localStorage.setItem('pokemonCaught', alreadyCaught);
+
+            return alreadyCaught;
+        }
+
+        function getAlreadyCaught() {
+            let alreadyCaught;
+            var pokemonCaught = localStorage.getItem('pokemonCaught');
+            if (pokemonCaught !== null) {
+                alreadyCaught = pokemonCaught.toLowerCase().split(",");
+            } else {
+                alreadyCaught = [];
+            }
+            return alreadyCaught;
+        }
+
+    </script>}
